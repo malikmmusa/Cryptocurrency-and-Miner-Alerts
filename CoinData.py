@@ -3,10 +3,11 @@ import time
 import SendTextViaSMS as text
 import requests
 import datetime
+import os
 
 def getPrices(prevPayout):
     while True:
-        miner = '0xb5d94e9676948cfd7ae4a111d32745472d515cbd'
+        miner = os.getenv('MINER_ID')
         # Get and recieve text updates for desired coin if increases or decreases by 5% in 24hr period
         prices = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum&vs_currencies=usd').json()
         price_bitcoin = prices.get('bitcoin').get('usd')
@@ -16,6 +17,11 @@ def getPrices(prevPayout):
         if (price_bitcoin / price_24hrs_bitcoin) < 0.95:
             print('CHECKING PRICE')
             message = f'Bitcoin is down 5% to {price_bitcoin} in the last 24 hours.'
+            text.sendText(message)
+
+        if (price_ethereum / price_24hrs_ethereum) < 0.95:
+            print('CHECKING PRICE')
+            message = f'Ethereum is down 5% to {price_ethereum} in the last 24 hours.'
             text.sendText(message)
 
         # Get and recieve text updates for mining operations and payouts
