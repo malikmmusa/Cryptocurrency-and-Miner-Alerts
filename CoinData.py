@@ -37,4 +37,4 @@ def getPrices(prevPayout):
             prevPayout = payout
 
         # Check every 5 minutes seconds for updates
-        time.sleep(5)
+        time.sleep(300)
